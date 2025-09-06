@@ -1,10 +1,17 @@
 import { useState, useRef, type FormEvent } from "react";
 import FormField from "./FormField";
+import { useMutation } from "@/hooks/useMutation";
+import { authApi } from "@/api/authApi";
+import type { RegisterRequest, RegisterResponse } from "@/types/api";
+import axios from "axios";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Register = () => {
+  const { mutate: register } = useMutation<RegisterResponse, RegisterRequest>(
+    authApi.register
+  );
   const errRef = useRef<HTMLDivElement>(null);
 
   const [username, setUsername] = useState("");
@@ -26,10 +33,32 @@ const Register = () => {
       setErrMsg("Invalid Entry");
       return;
     }
-    
-    console.log(username, pwd);
-    setSuccess(true);
+
+    register({
+      password: pwd,
+      username: username,
+    })
+      .then(() => {
+        setSuccess(true);
+      })
+      .catch((err) => {
+        if (axios.isAxiosError(err)) {
+          setErrMsg(err.response?.data.message);
+        }
+        setSuccess(false);
+      });
   };
+
+  if (success) {
+    return (
+      <section>
+        <h1>Success!</h1>
+        <p>
+          <a href="#">Sign up</a>
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section aria-labelledby="register-title">
