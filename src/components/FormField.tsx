@@ -32,7 +32,7 @@ const FormField = ({
 }: FormFieldProps) => {
   const error = errors?.[id];
   const value = useWatch({ control: control, name: id });
-  const isValid = !error && value?.trim() !== "";
+  const isValid = value != undefined && !error && value.trim() !== "";
   const validationId = `${id}-note`;
 
   return (

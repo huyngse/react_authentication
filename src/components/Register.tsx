@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,7 +32,7 @@ const schema = yup.object({
     .required("Confirm password is required"),
 });
 
-export type RegisterForm = {
+type RegisterForm = {
   username: string;
   password: string;
   confirmPassword: string;
@@ -66,9 +66,14 @@ const Register = () => {
           setErrMsg("Registration failed");
         }
         setSuccess(false);
-        errRef.current?.focus();
       });
   };
+
+  useEffect(() => {
+    if (errMsg) {
+      errRef.current?.focus();
+    }
+  }, [errMsg]);
 
   if (success) {
     return (
@@ -114,14 +119,13 @@ const Register = () => {
             errors={errors}
             control={control}
           />
-
-          <button disabled={!isValid}>Sign Up</button>
         </fieldset>
+        <button disabled={!isValid}>Sign Up</button>
       </form>
 
       {errMsg && (
-        <p className="errmsg" aria-live="assertive" ref={errRef}>
-          {errMsg}
+        <p className="errmsg" aria-live="assertive" ref={errRef} tabIndex={-1}>
+          {errMsg || "\u00A0"}
         </p>
       )}
 
@@ -129,7 +133,7 @@ const Register = () => {
         <p>
           Already registered?
           <br />
-          <a href="#">Sign In</a>
+          <a href="/login">Log In</a>
         </p>
       </aside>
     </section>
