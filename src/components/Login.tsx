@@ -1,15 +1,12 @@
-import { authApi } from "@/api/authApi";
-import { useMutation } from "@/hooks/useMutation";
-import type { LoginRequest, LoginResponse } from "@/types/api";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import FormField from "./FormField";
-
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/app/store";
+import { loginUser } from "@/features/auth/authSlice";
+import { PWD_REGEX, USER_REGEX } from "@/constants/regex";
 
 const schema = yup.object({
   username: yup
@@ -34,14 +31,12 @@ type LoginForm = {
 };
 
 const Login = () => {
-  const { mutate: login } = useMutation<LoginResponse, LoginRequest>(
-    authApi.login
+  const dispatch = useDispatch<AppDispatch>();
+  const { token, loading, error } = useSelector(
+    (state: RootState) => state.auth
   );
 
-  const [errMsg, setErrMsg] = useState("");
   const errRef = useRef<HTMLDivElement>(null);
-
-  const [success, setSuccess] = useState(false);
 
   const {
     register: formRegister,
@@ -54,25 +49,16 @@ const Login = () => {
   });
 
   const onSubmit = (data: LoginForm) => {
-    login({ username: data.username, password: data.password })
-      .then(() => setSuccess(true))
-      .catch((err) => {
-        if (axios.isAxiosError(err)) {
-          setErrMsg(err.response?.data.message || "Login failed");
-        } else {
-          setErrMsg("Login failed");
-        }
-        setSuccess(false);
-      });
+    dispatch(loginUser(data));
   };
 
   useEffect(() => {
-    if (errMsg) {
+    if (error) {
       errRef.current?.focus();
     }
-  }, [errMsg]);
+  }, [error]);
 
-  if (success) {
+  if (token) {
     return (
       <section>
         <h1>You are logged in!</h1>
@@ -104,12 +90,14 @@ const Login = () => {
           errors={errors}
           control={control}
         />
-        <button disabled={!isValid}>Log In</button>
+        <button disabled={!isValid || loading}>
+          {loading ? "Logging in..." : "Log In"}
+        </button>
       </form>
 
-      {errMsg && (
+      {error && (
         <p className="errmsg" aria-live="assertive" ref={errRef} tabIndex={-1}>
-          {errMsg || "\u00A0"}
+          {error || "\u00A0"}
         </p>
       )}
       <aside>
