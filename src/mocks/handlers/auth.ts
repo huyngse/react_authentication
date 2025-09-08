@@ -15,7 +15,7 @@ export const authHandlers = [
         await delay();
         const { username } = await request.json();
         if (username === "taken") {
-            return HttpResponse.json<ErrorResponse>({ message: "Username already taken" }, { status: 400 });
+            return HttpResponse.json<ErrorResponse>({ message: "Username already taken" }, { status: 409 });
         }
         return HttpResponse.json<RegisterResponse>({ message: "Registered successfully!" });
     }),

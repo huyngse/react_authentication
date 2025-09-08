@@ -4,7 +4,12 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type FieldErrors, type UseFormRegisterReturn } from "react-hook-form";
+import {
+  useWatch,
+  type Control,
+  type FieldErrors,
+  type UseFormRegisterReturn,
+} from "react-hook-form";
 
 interface FormFieldProps {
   id: string;
@@ -13,6 +18,7 @@ interface FormFieldProps {
   autoFocus?: boolean;
   register: UseFormRegisterReturn;
   errors?: FieldErrors;
+  control: Control<any>;
 }
 
 const FormField = ({
@@ -22,9 +28,11 @@ const FormField = ({
   autoFocus = false,
   register,
   errors,
+  control,
 }: FormFieldProps) => {
   const error = errors?.[id];
-  const isValid = !error; 
+  const value = useWatch({ control: control, name: id });
+  const isValid = !error && value?.trim() !== "";
   const validationId = `${id}-note`;
 
   return (
@@ -43,7 +51,7 @@ const FormField = ({
         type={type}
         autoFocus={autoFocus}
         autoComplete="off"
-        aria-invalid={isValid ? "false" : "true"}
+        aria-invalid={error ? "false" : "true"}
         aria-describedby={validationId}
         {...register}
       />

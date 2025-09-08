@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,7 +32,7 @@ const schema = yup.object({
     .required("Confirm password is required"),
 });
 
-type FormValues = {
+export type RegisterForm = {
   username: string;
   password: string;
   confirmPassword: string;
@@ -44,17 +44,19 @@ const Register = () => {
   );
   const [success, setSuccess] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const errRef = useRef<HTMLDivElement>(null);
 
   const {
     register: formRegister,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FormValues>({
+    control,
+  } = useForm<RegisterForm>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: RegisterForm) => {
     register({ username: data.username, password: data.password })
       .then(() => setSuccess(true))
       .catch((err) => {
@@ -64,6 +66,7 @@ const Register = () => {
           setErrMsg("Registration failed");
         }
         setSuccess(false);
+        errRef.current?.focus();
       });
   };
 
@@ -72,7 +75,7 @@ const Register = () => {
       <section>
         <h1>Success!</h1>
         <p>
-          <a href="#">Sign up</a>
+          <a href="#">Sign In</a>
         </p>
       </section>
     );
@@ -91,6 +94,7 @@ const Register = () => {
             autoFocus
             register={formRegister("username")}
             errors={errors}
+            control={control}
           />
 
           <FormField
@@ -99,6 +103,7 @@ const Register = () => {
             type="password"
             register={formRegister("password")}
             errors={errors}
+            control={control}
           />
 
           <FormField
@@ -107,6 +112,7 @@ const Register = () => {
             type="password"
             register={formRegister("confirmPassword")}
             errors={errors}
+            control={control}
           />
 
           <button disabled={!isValid}>Sign Up</button>
@@ -114,7 +120,7 @@ const Register = () => {
       </form>
 
       {errMsg && (
-        <p className="errmsg" aria-live="assertive">
+        <p className="errmsg" aria-live="assertive" ref={errRef}>
           {errMsg}
         </p>
       )}
