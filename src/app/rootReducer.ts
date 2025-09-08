@@ -1,8 +1,20 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import authReducer from '@/features/auth/authSlice';
+import {
+    persistReducer,
+} from "redux-persist";
+import storage from 'redux-persist/lib/storage';
+
+const persistConfig = {
+    key: "auth",
+    storage,
+    whitelist: ["token"],
+};
+
+const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 
 const rootReducer = combineReducers({
-    auth: authReducer,
+    auth: persistedAuthReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
