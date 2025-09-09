@@ -7,7 +7,7 @@ import { persistor, store } from "./app/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
 
 if (process.env.NODE_ENV === "development") {
-  const { worker } = await import("./mocks/browser");
+  const { worker } = await import("./shared/mocks/browser");
   worker.start({ onUnhandledRequest: "bypass" });
 }
 

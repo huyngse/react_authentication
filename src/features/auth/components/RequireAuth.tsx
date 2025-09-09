@@ -1,18 +1,24 @@
 import { useAppSelector } from "@/app/hooks";
 import { Navigate, Outlet } from "react-router-dom";
 
-const RequireAuth = () => {
-  const { accessToken, loading } = useAppSelector((state) => state.auth);
+interface RequireAuthProps {
+  allowedRoles?: string[];
+}
+const RequireAuth = ({ allowedRoles = [] }: RequireAuthProps) => {
+  const { accessToken, loading, roles } = useAppSelector((state) => state.auth);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
-  if (accessToken) {
+  if (!accessToken) return <Navigate to="/login" replace />;
+
+  if (
+    !allowedRoles.length ||
+    roles?.some((role) => allowedRoles.includes(role))
+  ) {
     return <Outlet />;
-  } else {
-    return <Navigate to={"/login"} replace />;
   }
+
+  return <Navigate to="/unauthorized" replace />;
 };
 
 export default RequireAuth;

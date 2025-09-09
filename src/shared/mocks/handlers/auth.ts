@@ -12,6 +12,8 @@ export const authHandlers = [
         }
         if (username === "admin" && password === "Secret123!") {
             return HttpResponse.json<LoginResponse>({ username: "admin", accessToken: accessToken, roles: ["admin"] });
+        } else if (username === "editor" && password === "Secret123!") {
+            return HttpResponse.json<LoginResponse>({ username: "editor", accessToken: accessToken, roles: ["editor"] });
         }
         return HttpResponse.json<ErrorResponse>({ message: "Invalid credentials" }, { status: 401 });
     }),

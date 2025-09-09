@@ -6,6 +6,7 @@ import FormField from "@/shared/components/FormField";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/app/store";
 import { PWD_REGEX, USER_REGEX, loginUser } from "@/features/auth";
+import { Navigate, useLocation } from "react-router-dom";
 
 const schema = yup.object({
   username: yup
@@ -34,6 +35,8 @@ const Login = () => {
   const { accessToken, loading, error } = useSelector(
     (state: RootState) => state.auth
   );
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const errRef = useRef<HTMLDivElement>(null);
 
@@ -58,14 +61,7 @@ const Login = () => {
   }, [error]);
 
   if (accessToken) {
-    return (
-      <section>
-        <h1>You are logged in!</h1>
-        <p>
-          <a href="#">Go to Home</a>
-        </p>
-      </section>
-    );
+    return <Navigate to={from} replace />;
   }
 
   return (

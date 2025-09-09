@@ -23,11 +23,20 @@ function App() {
 
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Home />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={["editor"]} />}>
             <Route path="/editor" element={<Editor />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={["admin"]} />}>
             <Route path="/admin" element={<Admin />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={["admin", "editor"]} />}>
             <Route path="/lounge" element={<Lounge />} />
           </Route>
-          
+
           <Route path="*" element={<Missing />} />
         </Route>
       </Routes>
