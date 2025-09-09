@@ -32,7 +32,7 @@ type LoginForm = {
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { token, loading, error } = useSelector(
+  const { accessToken, loading, error } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -58,7 +58,7 @@ const Login = () => {
     }
   }, [error]);
 
-  if (token) {
+  if (accessToken) {
     return (
       <section>
         <h1>You are logged in!</h1>

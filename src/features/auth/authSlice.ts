@@ -4,13 +4,17 @@ import type { LoginRequest, LoginResponse } from "@/types/api";
 import axios from "axios";
 
 interface AuthState {
-    token: string | null;
+    username: string | null;
+    accessToken: string | null;
+    roles: string[];
     loading: boolean;
     error: string | null;
 }
 
 const initialState: AuthState = {
-    token: null,
+    username: null,
+    accessToken: null,
+    roles: [],
     loading: false,
     error: null,
 };
@@ -36,7 +40,9 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
-            state.token = null;
+            state.accessToken = null;
+            state.username = null;
+            state.roles = [];
         },
     },
     extraReducers: (builder) => {
@@ -47,7 +53,9 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action: PayloadAction<LoginResponse>) => {
                 state.loading = false;
-                state.token = action.payload.token;
+                state.username = action.payload.username;
+                state.accessToken = action.payload.accessToken;
+                state.roles = action.payload.roles;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
