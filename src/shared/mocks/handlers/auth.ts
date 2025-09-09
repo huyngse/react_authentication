@@ -1,5 +1,5 @@
+import type { ErrorResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "@/features/auth/types";
 import { delay, http, HttpResponse } from "msw";
-import type { ErrorResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "@/types/api";
 
 let accessToken = 'initial-access-token'
 

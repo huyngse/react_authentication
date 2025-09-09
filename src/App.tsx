@@ -9,7 +9,7 @@ import Admin from "./pages/Admin";
 import Lounge from "./pages/Lounge";
 import Missing from "./pages/Missing";
 import Home from "./pages/Home";
-import RequireAuth from "./features/auth/RequireAuth";
+import RequireAuth from "./features/auth/components/RequireAuth";
 
 function App() {
   return (

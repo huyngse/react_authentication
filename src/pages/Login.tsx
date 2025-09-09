@@ -2,11 +2,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import FormField from "../components/FormField";
+import FormField from "@/shared/components/FormField";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/app/store";
-import { loginUser } from "@/features/auth/authSlice";
-import { PWD_REGEX, USER_REGEX } from "@/constants/regex";
+import { PWD_REGEX, USER_REGEX, loginUser } from "@/features/auth";
 
 const schema = yup.object({
   username: yup

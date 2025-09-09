@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import FormField from "../components/FormField";
-import { useMutation } from "@/hooks/useMutation";
-import { authApi } from "@/api/authApi";
-import type { RegisterRequest, RegisterResponse } from "@/types/api";
+import FormField from "@/shared/components/FormField";
+import { useMutation } from "@/shared/hooks/useMutation";
 import axios from "axios";
-import { PWD_REGEX, USER_REGEX } from "@/constants/regex";
+import {
+  PWD_REGEX,
+  USER_REGEX,
+  type RegisterResponse,
+  type RegisterRequest,
+  authApi,
+} from "@/features/auth";
 
 const schema = yup.object({
   username: yup
