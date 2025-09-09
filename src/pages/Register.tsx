@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import FormField from "./FormField";
+import FormField from "../components/FormField";
 import { useMutation } from "@/hooks/useMutation";
 import { authApi } from "@/api/authApi";
 import type { RegisterRequest, RegisterResponse } from "@/types/api";

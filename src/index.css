@@ -21,6 +21,36 @@ h1 {
   color: #333;
 }
 
+h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+  color: #444;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: #666;
+}
+
+h5 {
+  font-size: 1rem;
+  margin-bottom: 0.6rem;
+  color: #777;
+}
+
+h6 {
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  color: #888;
+}
+
 form fieldset {
   border: none;
   padding: 0;
@@ -98,7 +128,10 @@ input:focus {
   line-height: 1.4;
 }
 
-form button {
+button {
   padding: 0.6rem 2rem;
+}
+
+form button {
   width: 100%;
 }
